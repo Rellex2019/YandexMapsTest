@@ -23,16 +23,20 @@ export default {
     data() {
         return {
             accountName: "Кирилл Зятчин",
-            selectedTab: "Настройка",
             logo: Logo,
             spanner: Spanner,
 
         };
     },
+    props:{
+        selectedTab:{
+            required: true,
+            type: String
+        }
+    },
     methods: {
         selectTab(tab) {
-            this.selectedTab = tab;
-            console.log(tab);
+            this.$emit('select-tab', tab);
         }
     }
 };
@@ -41,9 +45,9 @@ export default {
 <style scoped>
 .sidebar-container {
     width: 280px;
-    height: 100vh;
+    height: calc(100vh - 30px);
     background-color: #F6F8FA;
-    padding: 15px;
+    padding: 15px 15px;
 }
 
 header {
