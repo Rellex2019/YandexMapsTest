@@ -6,7 +6,7 @@ header('Access-Control-Allow-Headers: Content-Type');
 header('Access-Control-Allow-Credentials: true');
 header('Content-Type: application/json; charset=utf-8');
 
-require 'vendor/autoload.php';
+require __DIR__ . '/vendor/autoload.php';
 require 'WebDriverManager.php';
 
 use Facebook\WebDriver\WebDriverBy;
