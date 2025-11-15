@@ -8,7 +8,7 @@
         <div class="tabs-container">
             <div class="name-tab"><img :src="spanner">{{ selectedTab }}</div>
             <div class="buttons-container">
-                <button @click="selectTab('Отзывы')" :class="{ active: selectedTab === 'Отзывы'}">Отзывы</button>
+                <button @click="selectTab('Отзывы')" :disabled="placeInfo.length === 0" :class="{ active: selectedTab === 'Отзывы'}">Отзывы</button>
                 <button @click="selectTab('Настройка')" :class="{ active: selectedTab === 'Настройка'}">Настройка</button>
             </div>
 
@@ -27,6 +27,12 @@ export default {
             spanner: Spanner,
 
         };
+    },
+    inject:['getPlaceInfo'],
+    computed: {
+        placeInfo() {
+            return this.getPlaceInfo ? this.getPlaceInfo() : [];
+        }
     },
     props:{
         selectedTab:{
@@ -111,5 +117,17 @@ header {
 .buttons-container button.active {
     background-color: #FFFFFF;
     box-shadow: 0px 2px 1px rgba(0, 0, 0, 0.02);
+}
+
+.buttons-container button[disabled] {
+    text-align: start;
+    padding: 5px 45px;
+    border-radius: 12px;
+    background: none;
+    border: none;
+    font-weight: 500;
+    font-size: 12px;
+    opacity: 0.6;
+    cursor: not-allowed;
 }
 </style>

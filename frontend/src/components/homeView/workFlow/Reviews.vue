@@ -1,33 +1,27 @@
 <template>
-    <div class="service-container">
+    <div v-if="placeInfo" class="service-container">
         <div class="name-service"><img :src="mark">Яндекс карты</div>
         <div class="reviews-container">
             <div class="reviews">
-                <div class="review-container" v-for="review in 5">
+                <div v-if="placeInfo.reviews" class="review-container" v-for="review in placeInfo.reviews">
                     <div class="review" >
                         <div class="padding">
                             <div class="review-info-container">
                                 <div class="date-branch-container">
-                                    <div class="date">12.09.2022 14:22</div>
+                                    <div class="date">{{ review.date }}</div>
                                     <div class="branch-office">Филиал 1</div>
                                     <img :src="mark">
                                 </div>
                                 <div class="rating-stars">
-                                    <img :src="filledStar" alt="" v-for="star in 5">
+                                    <img :src="filledStar" alt="" v-for="star in review.rating">
                                 </div>
                             </div>
                             <div class="name-phone">
-                                <div class="name">Наталья</div>
+                                <div class="name">{{ review.author }}</div>
                                 <div class="phone">+7 900 540 40 40</div>
                             </div>
                             <div class="review-body">
-                                Так, с чего начать... Разнообразная алкогольная продукция, множество закусок и обычных
-                                блюд. Кухня вкусная и
-                                Разнообразная, от супа и салатов до мясных продуктов. Персонал молодые девушки,
-                                общительная и доброжелательные,
-                                всегда подскажут, вовремя принесут и вызовут такси. Отдыхали на летней веранде, свежо и
-                                тепло, в общем самое то в
-                                жаркую погоду. Сами залы не сильно рассмотрел, но видел что они удобные и просторные.
+                                {{ review.text }}
                             </div>
                         </div>
                     </div>
@@ -35,13 +29,14 @@
             </div>
             <div class="total-rating">
                 <div class="rating-container">
-                    <div class="in-number">4.7</div>
+                    <div class="in-number">{{ placeInfo.overall_rating }}</div>
                     <div class="in-stars">
-                        <img :src="filledStar" alt="" v-for="star in 5">
+                        <img :src="filledStar" v-if="placeInfo.overall_rating" alt="" v-for="star in Math.floor(placeInfo.overall_rating)">
+
                     </div>
                 </div>
                 <div class="hr"></div>
-                <div class="total-reviews">Всего отзывов: 1 145</div>
+                <div class="total-reviews">Всего отзывов: {{ placeInfo.total_reviews }}</div>
             </div>
         </div>
     </div>
@@ -55,7 +50,13 @@ export default {
             mark: Mark,
             filledStar: Star
         }
-    }
+    },
+    computed: {
+        placeInfo() {
+            return this.getPlaceInfo ? this.getPlaceInfo() : [];
+        }
+    },
+    inject:['getPlaceInfo'],
 }
 </script>
 <style scoped>
