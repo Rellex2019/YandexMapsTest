@@ -1,0 +1,43 @@
+
+services:
+  selenium:
+    image: selenium/standalone-chrome:latest
+    container_name: selenium-chrome
+    ports:
+      - "4444:4444"
+    environment:
+      - SE_NODE_SESSION_TIMEOUT=60
+      - SE_NODE_OVERRIDE_MAX_SESSIONS=true
+      - SE_NODE_MAX_SESSIONS=5
+      - SE_NODE_GRID_TIMEOUT=60
+      - SE_SESSION_RETRY_INTERVAL=1
+      - SE_START_VNC=false
+    shm_size: 2gb
+    mem_limit: 2g
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4444/status"]
+      interval: 10s
+      timeout: 10s
+      retries: 10
+      start_period: 30s
+
+  php:
+    build: ./backend
+    container_name: php-app
+    ports:
+      - "80:80"
+    depends_on:
+      selenium:
+        condition: service_healthy
+    networks:
+      - app-network
+    volumes:
+      - ./backend:/var/www/html
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+networks:
+  app-network:
+    driver: bridge
